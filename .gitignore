@@ -27,3 +27,6 @@ manga_dl-*.tar
 
 # Vim swap files
 .*.sw*
+
+# Other
+/lib/dl.ex

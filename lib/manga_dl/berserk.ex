@@ -15,7 +15,8 @@ defmodule MangaDl.Berserk do
   #         | {:error, Any.t()}
   def extract_urls(dict_agent, chapter_url) do
     r = _extract_urls(dict_agent, chapter_url)
-    IO.inspect(r, label: :"extract_urls result")
+    # IO.inspect(r, label: :"extract_urls result")
+    r
   end
   def _extract_urls(dict_agent, chapter_url) do
     case MangaDl.MintWrapper.request(

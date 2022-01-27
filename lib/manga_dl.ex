@@ -9,7 +9,7 @@ defmodule MangaDl do
   ) do
     case plugin.extract_urls(conn_agent, plugin.chapter_url(chapter)) do
       {:ok, urls} ->
-        concurrency = System.schedulers_online() * 3
+        concurrency = System.schedulers_online()
         chapter_dir = "#{String.trim_trailing(manga_dir, "/")}/#{chapter}"
         File.mkdir(chapter_dir)
         Enum.with_index(urls)
@@ -19,12 +19,11 @@ defmodule MangaDl do
           :download_page,
         [chapter_dir, conn_agent],
           max_concurrency: concurrency,
-          timeout: 20000
+          timeout: 1200000
         ) 
         |> Enum.to_list()
         |> Enum.filter(
           fn(result) ->
-            IO.inspect(result)
             result != :ok and result != {:ok, :ok}
           end
         )
@@ -33,7 +32,7 @@ defmodule MangaDl do
     end
   end
   def download_page({page_url, i}, dir, conn_agent) do
-    file_name = "#{i}#{Enum.at(Regex.run(~r/\.jpe?g$/, page_url), 0)}"
+    file_name = "#{i + 1}#{Enum.at(Regex.run(~r/\.jpe?g$/, page_url), 0)}"
     file_dir = "#{dir}/#{file_name}"
     case File.open(file_dir, [:write, :raw]) do
       {:ok, file} ->
@@ -63,12 +62,12 @@ defmodule MangaDl do
             end
 
           error ->
-            IO.inspect(error, label: :'Downloading page error')
+            # IO.inspect(error, label: :'Downloading page error')
             Tuple.append(error, i)
         end
 
       error ->
-        IO.inspect(error, label: :'File open error')
+        # IO.inspect(error, label: :'File open error')
         Tuple.append(error, i)
     end
   end

@@ -97,7 +97,7 @@ defmodule MangaDl.MintWrapper do
       message ->
         case HTTP.stream(conn, message) do
           :unknown ->
-            IO.inspect(message, label: :"unknown message")
+            # IO.inspect(message, label: :"unknown message")
             # :unknown
             recv_response(conn, req_ref, res, cb)
 
@@ -190,7 +190,7 @@ defmodule MangaDl.MintWrapper do
                 # register(conn_agent, uri.host, conn)
                 {:ok, res}
               error ->
-                IO.inspect(error, label: :"recv_response error")
+                # IO.inspect(error, label: :"recv_response error")
                 error
             end
           {:error, _err} = error -> error
