@@ -17,7 +17,7 @@ defmodule MangaDl do
         |> Task.async_stream(
           MangaDl,
           :download_page,
-        [chapter_dir, conn_agent],
+          [chapter_dir, conn_agent],
           max_concurrency: concurrency,
           timeout: 1200000
         ) 
@@ -32,7 +32,8 @@ defmodule MangaDl do
     end
   end
   def download_page({page_url, i}, dir, conn_agent) do
-    file_name = "#{i + 1}#{Enum.at(Regex.run(~r/\.jpe?g$/, page_url), 0)}"
+    file_name = "#{i + 1}#{Enum.at(String.split(page_url, "/", -1)}"
+    IO.inspect(file_name, label: :file_name)
     file_dir = "#{dir}/#{file_name}"
     case File.open(file_dir, [:write, :raw]) do
       {:ok, file} ->
@@ -40,7 +41,36 @@ defmodule MangaDl do
           conn_agent,
           page_url,
           "GET",
-          [{"Connection", "Keep-Alive"}],
+          [
+            {"host", "cdn.readdrstone.com"},
+            {"connection", "keep-alive"},
+            {
+              "agent",
+              "Mozilla/5.0 (Linux; Android 7.0; X53) " <>
+                "AppleWebKit/537.36 (KHTML, like Gecko) " <>
+                  "Chrome/91.0.4472.120 Mobile Safari/537.36"
+            },
+            {
+              "accept",
+              "image/avif,image/webp,image/apng,image/svg+xml," <>
+                "image/*,*/*;q=0.8"
+            },
+            # {
+            #   "sec-ch-ua",
+            #   ~s[" Not;A Brand";v="99", "Google Chrome";v="91", ] <> 
+            #     ~s["Chromium";v="91"],
+            # },
+            # {"sec-ch-ua-mobile", "?1"},
+            # {"dnt", "1"},
+            # {"save-data", "on"},
+            # {"upgrade-insecure-requests", "1"},
+            # {"sec-fetch-site", "none"},
+            # {"sec-fetch-mode", "navigate"},
+            # {"sec-fetch-user", "?1"},
+            # {"sec-fetch-dest", "document"},
+           # {"accept-encoding", "utf-8"},
+           # {"accept-language", "en"}
+          ],
           nil,
           fn({:data, mint_req_ref, data}, req_ref, res)
             when mint_req_ref == req_ref ->

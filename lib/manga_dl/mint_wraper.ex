@@ -187,14 +187,12 @@ defmodule MangaDl.MintWrapper do
           {:ok, conn, req_ref} ->
             case recv_response(conn, req_ref, cb) do
               {:ok, res, conn} ->
-                # register(conn_agent, uri.host, conn)
                 {:ok, res}
               error ->
-                # IO.inspect(error, label: :"recv_response error")
                 error
             end
-          {:error, _err} = error -> error
-          {:error, _conn, _err} = error -> error
+          {:error, _} = error -> error
+          {:error, _, _} = error -> error
         end
 
       {{:error, err}, _} ->
