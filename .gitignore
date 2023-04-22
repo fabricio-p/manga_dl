@@ -30,3 +30,4 @@ manga_dl-*.tar
 
 # Other
 /lib/dl.ex
+/lib/manga_dl/l.ex

@@ -531,9 +531,16 @@ defmodule MangaDl do
     end
   end
 
-  def build_headers() do
+  def build_headers(user_agent \\ nil) do
     [
-      {"User-Agent", elem(@user_agents, :rand.uniform(@num_agents - 1))},
+      {
+        "User-Agent",
+        if(
+          user_agent,
+          do: user_agent,
+          else: elem(@user_agents, :rand.uniform(@num_agents - 1))
+        )
+      },
       {"Connection", "Keep-Alive"}
     ]
   end
