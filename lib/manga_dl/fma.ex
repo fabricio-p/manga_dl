@@ -33,4 +33,3 @@ defmodule MangaDl.FMA do
   def page_headers(_, _, _), do: []
   def page_body(_, _, _), do: nil
 end
-

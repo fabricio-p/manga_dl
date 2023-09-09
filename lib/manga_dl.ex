@@ -507,11 +507,11 @@ defmodule MangaDl do
   def download_chapter(plugin, manga_dir, chapter) do
     case plugin.extract_urls(plugin.chapter_url(chapter)) do
       {:ok, urls} ->
-        concurrency = div(System.schedulers_online(), 2)
+        concurrency = System.schedulers_online()
         chapter_dir = "#{String.trim_trailing(manga_dir, "/")}/#{chapter}"
         File.mkdir(chapter_dir)
 
-        Enum.with_index(urls)
+        Stream.with_index(urls)
         |> Task.async_stream(
           MangaDl,
           :download_page,
